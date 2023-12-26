@@ -53,7 +53,9 @@ cucumber.execution.parallel.config.fixed.parallelism=10
 ---
 
 ##### Future upcoming Enhancements  ...
-- [ ] Selenium Webdriver integration
+- [x] Selenium Webdriver integration  
 - [ ] Cucumber Reporter integration
-- [ ] Cucumber-Spring integration
+- [x] Cucumber-Spring integration
 - [ ] Re-run functionality integration
+
+**Note**: checked functionalities are implemented and can be found inside **feature-cucumber-spring-with-webdriver** branch
