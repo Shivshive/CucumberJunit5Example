@@ -14,8 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
-@Configuration
-@ScenarioScope
+
 @Log
 public class PageActions {
 
