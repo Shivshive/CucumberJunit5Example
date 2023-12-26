@@ -12,7 +12,6 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 
 // If we are planning to take feature files from src/test/resources then we can also use @SelectClasspathResource("foldername"), where foldername is the name of the folder inside resources folder where
 // feature files are present.
-
 @ConfigurationParameters(value = {
         @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "cj.workspace.domain"), // define steps files path
         @ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@Vegie or @fruit"),
