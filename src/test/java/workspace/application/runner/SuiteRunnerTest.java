@@ -1,4 +1,4 @@
-package runner;
+package workspace.application.runner;
 
 import org.junit.platform.suite.api.*;
 
@@ -13,10 +13,10 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 // If we are planning to take feature files from src/test/resources then we can also use @SelectClasspathResource("foldername"), where foldername is the name of the folder inside resources folder where
 // feature files are present.
 @ConfigurationParameters(value = {
-        @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "cj.workspace.domain"), // define steps files path
-        @ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@Vegie or @fruit"),
+        @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "workspace.application.domain"), // define steps files path
+//        @ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@ui"),
         @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty,summary,html:target/cucumber.html,json:target/cucumber.json"), // define reporting and console output
-        @ConfigurationParameter(key = FEATURES_PROPERTY_NAME, value = "src/test/java/cj/workspace/domain"), // define feature files path
+        @ConfigurationParameter(key = FEATURES_PROPERTY_NAME, value = "src/test/java/workspace/application/domain"), // define feature files path
 })
 public class SuiteRunnerTest {
 }
