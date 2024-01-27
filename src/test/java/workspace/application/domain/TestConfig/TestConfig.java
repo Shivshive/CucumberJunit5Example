@@ -6,4 +6,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan({ "workspace.application.domain", "workspace.application.runner"})
 public class TestConfig {
+
 }

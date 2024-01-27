@@ -6,17 +6,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import io.cucumber.spring.ScenarioScope;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import workspace.application.domain.core.PageActions;
+import workspace.application.domain.core.WebdriverFactory;
 import workspace.application.domain.objectRepo.AmazonHome;
 
 @Component
 @Log
-@NoArgsConstructor
 @ScenarioScope
 public class AmazonAction extends PageActions {
 
     private final static String AMAZON_URL = "https://amazon.in";
+
+    @Autowired
+    WebdriverFactory webdriverFactory;
+
+    public AmazonAction() {
+        System.out.println("Constructor for AmazonAction is called");
+    }
 
     public synchronized void open_amazon_website(){
         navigateTo(AMAZON_URL);

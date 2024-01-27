@@ -29,6 +29,10 @@ public class PageActions {
 
     private FluentWait<WebDriver> wait;
 
+    public PageActions() {
+        System.out.println("Constructor for PageActions is called");
+    }
+
     @PostConstruct
     private void initializePageActions(){
         wait = new FluentWait<>(webdriverFactory.getDriver());

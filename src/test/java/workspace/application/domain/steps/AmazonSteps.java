@@ -12,6 +12,10 @@ public class AmazonSteps {
     @Autowired
     AmazonAction amazonAction;
 
+    public AmazonSteps() {
+        System.out.println("Constructor of AmazonSteps is called.");
+    }
+
     @Given("open amazon india website")
     public void open_amazon_website(){
         amazonAction.open_amazon_website();

@@ -4,6 +4,7 @@ import io.cucumber.spring.ScenarioScope;
 import lombok.extern.java.Log;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,10 +25,19 @@ public class WebdriverFactory {
     @Value("${driver.implicit.wait}")
     private long IMPLICIT_WAIT;
 
+    @Value("${driver.chrome.headless}")
+    private boolean headless_chrome;
+
     public void initializeDriver(){
 
         var driver = switch (browserType) {
-            case "chrome" -> new ChromeDriver();
+            case "chrome" -> {
+
+                ChromeOptions options = new ChromeOptions();
+                if(headless_chrome)
+                    options.addArguments("--headless=new");
+                yield new ChromeDriver(options);
+            }
             case "firefox" -> new FirefoxDriver();
             case "edge" -> new EdgeDriver();
             default -> null;
@@ -37,6 +47,7 @@ public class WebdriverFactory {
             driver.manage().window().maximize();
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(IMPLICIT_WAIT));
             driverThreadLocal.set(driver);
+            log.info("driver initialized and set in thread local");
         }
         else {
             throw new RuntimeException("Driver Profile is not found..");
