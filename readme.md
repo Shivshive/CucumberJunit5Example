@@ -53,7 +53,8 @@ cucumber.execution.parallel.config.fixed.parallelism=10
 ---
 
 ##### Future upcoming Enhancements  ...
-- [ ] Selenium Webdriver integration
-- [ ] Cucumber Reporter integration
-- [ ] Cucumber-Spring integration
+- [x] Selenium Webdriver integration
+- [x] Cucumber Reporter integration
+- [x] Cucumber-Spring integration
+- [x] Added Custom Launcher
 - [ ] Re-run functionality integration
