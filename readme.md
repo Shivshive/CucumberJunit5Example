@@ -13,6 +13,44 @@
 public class SuiteRunnerTest {
 }
 ```
+
+OR 
+
+```java
+public class CustomLauncherTest {
+
+    @BeforeAll
+    public static void beforeAll(){
+        log.info(" *************************** [[ before all executed ]] ******************************** ");
+    }
+
+    @Test
+    public void runTest(){
+
+        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+                .filters(EngineFilter.includeEngines("cucumber"))
+                .configurationParameters(Map.of(
+                        GLUE_PROPERTY_NAME , "workspace.application.domain",
+                        PLUGIN_PROPERTY_NAME, "pretty,summary,html:target/cucumber.html,json:target/cucumber-report/cucumber.json",
+                        FEATURES_PROPERTY_NAME,"src/test/java/workspace/application/domain",
+                        PARALLEL_EXECUTION_ENABLED_PROPERTY_NAME,"true",
+                        PARALLEL_CONFIG_STRATEGY_PROPERTY_NAME,"fixed",
+                        PARALLEL_CONFIG_FIXED_PARALLELISM_PROPERTY_NAME,"5"
+                ))
+                .build();
+        Launcher launcher = LauncherFactory.create();
+        launcher.execute(request);
+
+    }
+
+    @AfterAll
+    public static void afterAll(){
+        log.info(" *************************** [[ after all executed ]] ******************************** ");
+    }
+}
+
+```
+
 ---
 ### To run it via Maven CLI use 
 > mvn clean test -Dsurefire.includeJunit5Engines=cucumber
