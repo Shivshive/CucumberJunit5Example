@@ -90,9 +90,28 @@ cucumber.execution.parallel.config.fixed.parallelism=10
 
 ---
 
+### Network Interception is added -- 
+#### Dynamically generate Har file and attach to the cucumber report
+```java
+
+public void start_interception(Scenario scenario){
+    networkInterception.setHarfileName(String.format("%s-%s.har",scenario.getName(),(DateTimeFormatter.ofPattern("dd-MM-yyyy-hh-mm-ss-s").withZone(ZoneId.systemDefault()).format(Instant.now()))));
+    networkInterception.startNetworkInterception();
+}
+
+public  void attach_interception(Scenario scenario){
+    networkInterception.getHarAsBytes().ifPresent(harBytes -> {
+        scenario.attach(harBytes,"application",String.format("%s-%s.har",scenario.getName(),(DateTimeFormatter.ofPattern("dd-MM-yyyy-hh-mm-ss-s").withZone(ZoneId.systemDefault()).format(Instant.now()))));
+    });
+}
+
+```
+
+
 ##### Future upcoming Enhancements  ...
 - [x] Selenium Webdriver integration
 - [x] Cucumber Reporter integration
 - [x] Cucumber-Spring integration
 - [x] Added Custom Launcher
+- [x] Added network interception logic to intercept network traffic and attach as a har file in report
 - [ ] Re-run functionality integration
