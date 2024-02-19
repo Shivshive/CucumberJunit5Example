@@ -115,3 +115,5 @@ public  void attach_interception(Scenario scenario){
 - [x] Added Custom Launcher
 - [x] Added network interception logic to intercept network traffic and attach as a har file in report
 - [ ] Re-run functionality integration
+
+**Note**: checked functionalities are implemented and can be found inside **feature-cucumber-spring-with-webdriver** branch
