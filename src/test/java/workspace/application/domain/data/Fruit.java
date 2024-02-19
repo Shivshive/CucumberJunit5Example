@@ -1,4 +1,4 @@
-package cj.workspace.domain.data;
+package workspace.application.domain.data;
 
 import lombok.Data;
 

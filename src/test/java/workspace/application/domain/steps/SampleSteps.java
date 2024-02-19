@@ -1,9 +1,12 @@
-package cj.workspace.domain.steps;
+package workspace.application.domain.steps;
 
-import cj.workspace.domain.data.Fruit;
+import org.springframework.beans.factory.annotation.Autowired;
+import workspace.application.domain.core.WebdriverFactory;
+import workspace.application.domain.data.Fruit;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import lombok.extern.java.Log;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +15,6 @@ import java.util.List;
 public class SampleSteps {
 
     private List<Fruit> fruits;
-
 
     @Given("there is basket")
     public void thereIsBasket() {

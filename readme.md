@@ -13,6 +13,44 @@
 public class SuiteRunnerTest {
 }
 ```
+
+OR 
+
+```java
+public class CustomLauncherTest {
+
+    @BeforeAll
+    public static void beforeAll(){
+        log.info(" *************************** [[ before all executed ]] ******************************** ");
+    }
+
+    @Test
+    public void runTest(){
+
+        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+                .filters(EngineFilter.includeEngines("cucumber"))
+                .configurationParameters(Map.of(
+                        GLUE_PROPERTY_NAME , "workspace.application.domain",
+                        PLUGIN_PROPERTY_NAME, "pretty,summary,html:target/cucumber.html,json:target/cucumber-report/cucumber.json",
+                        FEATURES_PROPERTY_NAME,"src/test/java/workspace/application/domain",
+                        PARALLEL_EXECUTION_ENABLED_PROPERTY_NAME,"true",
+                        PARALLEL_CONFIG_STRATEGY_PROPERTY_NAME,"fixed",
+                        PARALLEL_CONFIG_FIXED_PARALLELISM_PROPERTY_NAME,"5"
+                ))
+                .build();
+        Launcher launcher = LauncherFactory.create();
+        launcher.execute(request);
+
+    }
+
+    @AfterAll
+    public static void afterAll(){
+        log.info(" *************************** [[ after all executed ]] ******************************** ");
+    }
+}
+
+```
+
 ---
 ### To run it via Maven CLI use 
 > mvn clean test -Dsurefire.includeJunit5Engines=cucumber
@@ -52,10 +90,30 @@ cucumber.execution.parallel.config.fixed.parallelism=10
 
 ---
 
+### Network Interception is added -- 
+#### Dynamically generate Har file and attach to the cucumber report
+```java
+
+public void start_interception(Scenario scenario){
+    networkInterception.setHarfileName(String.format("%s-%s.har",scenario.getName(),(DateTimeFormatter.ofPattern("dd-MM-yyyy-hh-mm-ss-s").withZone(ZoneId.systemDefault()).format(Instant.now()))));
+    networkInterception.startNetworkInterception();
+}
+
+public  void attach_interception(Scenario scenario){
+    networkInterception.getHarAsBytes().ifPresent(harBytes -> {
+        scenario.attach(harBytes,"application",String.format("%s-%s.har",scenario.getName(),(DateTimeFormatter.ofPattern("dd-MM-yyyy-hh-mm-ss-s").withZone(ZoneId.systemDefault()).format(Instant.now()))));
+    });
+}
+
+```
+
+
 ##### Future upcoming Enhancements  ...
-- [x] Selenium Webdriver integration  
-- [ ] Cucumber Reporter integration
+- [x] Selenium Webdriver integration
+- [x] Cucumber Reporter integration
 - [x] Cucumber-Spring integration
+- [x] Added Custom Launcher
+- [x] Added network interception logic to intercept network traffic and attach as a har file in report
 - [ ] Re-run functionality integration
 
 **Note**: checked functionalities are implemented and can be found inside **feature-cucumber-spring-with-webdriver** branch
