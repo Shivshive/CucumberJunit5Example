@@ -1,4 +1,4 @@
-@ui @amazon_sample
+@amazon_sample @ui
 Feature: search products on amazon
 
   Scenario: search macbook on amazon
