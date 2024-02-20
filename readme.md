@@ -14,28 +14,33 @@ public class SuiteRunnerTest {
 }
 ```
 
-OR 
+OR
 
 ```java
+import org.springframework.beans.factory.annotation.Value;
+
 public class CustomLauncherTest {
 
+    @Value("${parallel.thread.count}")
+    private String threadCount;
+
     @BeforeAll
-    public static void beforeAll(){
+    public static void beforeAll() {
         log.info(" *************************** [[ before all executed ]] ******************************** ");
     }
 
     @Test
-    public void runTest(){
+    public void runTest() {
 
         LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
                 .filters(EngineFilter.includeEngines("cucumber"))
                 .configurationParameters(Map.of(
-                        GLUE_PROPERTY_NAME , "workspace.application.domain",
+                        GLUE_PROPERTY_NAME, "workspace.application.domain",
                         PLUGIN_PROPERTY_NAME, "pretty,summary,html:target/cucumber.html,json:target/cucumber-report/cucumber.json",
-                        FEATURES_PROPERTY_NAME,"src/test/java/workspace/application/domain",
-                        PARALLEL_EXECUTION_ENABLED_PROPERTY_NAME,"true",
-                        PARALLEL_CONFIG_STRATEGY_PROPERTY_NAME,"fixed",
-                        PARALLEL_CONFIG_FIXED_PARALLELISM_PROPERTY_NAME,"5"
+                        FEATURES_PROPERTY_NAME, "src/test/java/workspace/application/domain",
+                        PARALLEL_EXECUTION_ENABLED_PROPERTY_NAME, "true",
+                        PARALLEL_CONFIG_STRATEGY_PROPERTY_NAME, "fixed",
+                        PARALLEL_CONFIG_FIXED_PARALLELISM_PROPERTY_NAME, threadCount
                 ))
                 .build();
         Launcher launcher = LauncherFactory.create();
@@ -44,13 +49,30 @@ public class CustomLauncherTest {
     }
 
     @AfterAll
-    public static void afterAll(){
+    public static void afterAll() {
         log.info(" *************************** [[ after all executed ]] ******************************** ");
     }
 }
 
 ```
 
+#### Implemented Spring boot variable in CustomeLauncher Class which is taking property value from application.properties
+
+```properties
+
+parallel.thread.count=5
+
+```
+---
+
+### To run Test with different configuration make use of spring profiles
+
+> --spring.profiles.active=dev
+
+Note: make sure to create files with suffix with the profile name like below
+* application-<profilename>.properties
+
+- Example: application-dev.properties
 ---
 ### To run it via Maven CLI use 
 > mvn clean test -Dsurefire.includeJunit5Engines=cucumber
@@ -107,11 +129,12 @@ public  void attach_interception(Scenario scenario){
 
 ```
 
-
 ##### Future upcoming Enhancements  ...
 - [x] Selenium Webdriver integration
 - [x] Cucumber Reporter integration
 - [x] Cucumber-Spring integration
 - [x] Added Custom Launcher
 - [x] Added network interception logic to intercept network traffic and attach as a har file in report
+- [x] Added profiles 
+- [x] Taking values from application context in CustomLauncher via sprint @Value tag
 - [ ] Re-run functionality integration
