@@ -89,6 +89,7 @@ It will run the suite file tagged with @Suite from the classpath.
 ### useful links
 * [Github Cucumber Junit5](https://junit.org/junit5/docs/current/user-guide/#running-tests-config-params)
 * [Github Cucumber @ConfigurationParameter Constants](https://github.com/cucumber/cucumber-jvm/blob/main/cucumber-junit-platform-engine/src/main/java/io/cucumber/junit/platform/engine/Constants.java)
+* [BliBli-Badak-Selenium-Har-Util](https://github.com/blibli-badak/selenium-har-util)
 
 ---
 
@@ -138,5 +139,4 @@ public  void attach_interception(Scenario scenario){
 - [x] Added profiles 
 - [x] Taking values from application context in CustomLauncher via spring @Value tag
 - [ ] Re-run functionality integration
-
-**Note**: checked functionalities are implemented and can be found inside **feature-cucumber-spring-with-webdriver** branch
+- [ ] Cucumber Reporter Plugin
