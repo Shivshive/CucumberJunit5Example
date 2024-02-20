@@ -136,5 +136,5 @@ public  void attach_interception(Scenario scenario){
 - [x] Added Custom Launcher
 - [x] Added network interception logic to intercept network traffic and attach as a har file in report
 - [x] Added profiles 
-- [x] Taking values from application context in CustomLauncher via sprint @Value tag
+- [x] Taking values from application context in CustomLauncher via spring @Value tag
 - [ ] Re-run functionality integration
