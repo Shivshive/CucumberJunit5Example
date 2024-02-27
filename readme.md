@@ -130,6 +130,30 @@ public  void attach_interception(Scenario scenario){
 
 ```
 
+### Different Properties Used in the project
+*Note: These are just defined for learning purpose that how one can use the properties in various ways based on the requirement.* 
+
+**There are three types of properties defined**
+- **Application.properties**
+  - These are pretty much system properties
+  - > **resources/application.properties**
+  - One can specify profiles and to change profile in application properties pass below parameter.
+  - > **--spring-profiles.active=dev** [To Active Dev Profile]
+  - Name format for application properties with profile - application-{profilename}.properties
+- **Environmental properties**
+  - These are environment specific properties
+  - > **resources/env/{env}.properties**
+  - **Example** - prod.properties
+    - These are being read by **EnvConfig** Class at runtime based on the value of environment variable "**env**" like "**-Denv=prod**" via maven command line.
+- **Common properties**
+  - These are common properties, if needed to be defined per requirement.
+  - > **common_config/common.properties**
+    - **CommonWorld** class read this properties at start of program and these properties can be accessed as below
+    - > CommonWorld.commonConfig.getProperty("common_username")
+   
+   
+----
+
 ##### Future upcoming Enhancements  ...
 - [x] Selenium Webdriver integration
 - [x] Cucumber Reporter integration
