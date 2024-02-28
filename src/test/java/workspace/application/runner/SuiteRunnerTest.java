@@ -18,7 +18,7 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 @ConfigurationParameters(value = {
         @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "workspace.application.domain"), // define steps files path
 //        @ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@ui"),
-        @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty,summary,html:target/cucumber.html,json:target/cucumber-report/cucumber.json"), // define reporting and console output
+        @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty,summary,html:target/cucumber.html,json:target/cucumber-report/cucumber.json, workspace.application.domain.core.listener.CucumberEventLIstener"), // define reporting and console output
         @ConfigurationParameter(key = FEATURES_PROPERTY_NAME, value = "src/test/java/workspace/application/domain"), // define feature files path,
         @ConfigurationParameter(key = PARALLEL_EXECUTION_ENABLED_PROPERTY_NAME , value = "true"), // define parallel execution true/false,
         @ConfigurationParameter(key = PARALLEL_CONFIG_STRATEGY_PROPERTY_NAME, value = "fixed"), // define parallel strategy fixed/dynamic/custom

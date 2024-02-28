@@ -154,6 +154,28 @@ public  void attach_interception(Scenario scenario){
    
 ----
 
+### Event Publisher
+
+Implemented event publisher for cucumber for handling events
+
+```java
+
+@Slf4j
+public class CucumberEventLIstener implements EventListener {
+    @Override
+    public void setEventPublisher(EventPublisher publisher) {
+
+        publisher.registerHandlerFor(TestRunFinished.class, event -> {
+            log.info("TestRunFinished is called");
+            CucumberReporter.setupReport();
+        });
+    }
+}
+
+```
+
+----
+
 ##### Future upcoming Enhancements  ...
 - [x] Selenium Webdriver integration
 - [x] Cucumber Reporter integration
