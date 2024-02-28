@@ -185,5 +185,5 @@ public class CucumberEventLIstener implements EventListener {
 - [x] Added profiles 
 - [x] Taking values from application context in CustomLauncher via spring @Value tag
 - [x] Implemented Event Publisher
+- [x] Cucumber Reporter Plugin
 - [ ] Re-run functionality integration
-- [ ] Cucumber Reporter Plugin
