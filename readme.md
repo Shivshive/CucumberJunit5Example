@@ -261,4 +261,5 @@ Scenario scenario = (Scenario) scenarioContext.get("scenario");
 - [x] Cucumber Reporter Plugin
 - [x] RestAssured Integration
 - [x] Data Carrier ScenarioContext
+- [x] Freemarker Template Engine Integration
 - [ ] Re-run functionality integration
