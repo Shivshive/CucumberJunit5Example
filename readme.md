@@ -130,6 +130,125 @@ public  void attach_interception(Scenario scenario){
 
 ```
 
+### Different Properties Used in the project
+*Note: These are just defined for learning purpose that how one can use the properties in various ways based on the requirement.* 
+
+**There are three types of properties defined**
+- **Application.properties**
+  - These are pretty much system properties
+  - > **resources/application.properties**
+  - One can specify profiles and to change profile in application properties pass below parameter.
+  - > **--spring-profiles.active=dev** [To Active Dev Profile]
+  - Name format for application properties with profile - application-{profilename}.properties
+- **Environmental properties**
+  - These are environment specific properties
+  - > **resources/env/{env}.properties**
+  - **Example** - prod.properties
+    - These are being read by **EnvConfig** Class at runtime based on the value of environment variable "**env**" like "**-Denv=prod**" via maven command line.
+- **Common properties**
+  - These are common properties, if needed to be defined per requirement.
+  - > **common_config/common.properties**
+    - **CommonWorld** class read this properties at start of program and these properties can be accessed as below
+    - > CommonWorld.commonConfig.getProperty("common_username")
+   
+   
+----
+
+### Event Publisher
+
+Implemented event publisher for cucumber for handling events
+
+```java
+
+@Slf4j
+public class CucumberEventLIstener implements EventListener {
+    @Override
+    public void setEventPublisher(EventPublisher publisher) {
+
+        publisher.registerHandlerFor(TestRunFinished.class, event -> {
+            log.info("TestRunFinished is called");
+            CucumberReporter.setupReport();
+        });
+    }
+}
+
+```
+
+---
+
+### RestAssured Integration
+
+Integrated RestAssured for Rest API Testing
+
+```java
+
+    @Autowired
+    RestSpecificationFactory restSpecificationFactory;
+// can use this object to get requestspecifiction instance.
+
+
+// further it can be used as 
+
+    Response response =  restSpecificationFactory.getInstance().given()
+            .log().all()
+            .body(reqPayload)
+            .when()
+            .post(URL)
+            .then()
+            .statusCode(anyOf(equalTo(200), equalTo(201)))
+            .extract()
+            .response();    
+
+```
+**Note:** 
+**RestSpecificationFactory Class** contains various methods for setting proxy, adding Keystore and TrustStore etc.
+
+----
+
+### ScenarioContext Data Carrier Between Cucumber Steps
+
+Added ScenarioContext Class which acts as a data carrier to pass data between cucumber steps.
+
+```java
+
+@Component
+@ScenarioScope
+public class ScenarioContext {
+
+    private Map<String,Object> scnearioContext;
+
+    public ScenarioContext() { }
+
+    @PostConstruct
+    public void init(){
+        scnearioContext = new LinkedHashMap<>();
+    }
+
+    public void put(String key, Object value){
+        scnearioContext.put(key,value);
+    }
+
+    public Object get(String key){
+        return scnearioContext.get(key);
+    }
+}
+
+// Can be used like below as a property injection within any class.
+@Autowired
+ScenarioContext scenarioContext;
+
+// can be used like below to get and set values.
+@Before // one of the already implemented example
+public void general_beforeScenario(Scenario scenario){
+  log.info("Setting up scenario in scenarioContext");
+  scenarioContext.put("scenario", scenario);
+}
+
+// To get Value
+Scenario scenario = (Scenario) scenarioContext.get("scenario");
+
+```
+
 ##### Future upcoming Enhancements  ...
 - [x] Selenium Webdriver integration
 - [x] Cucumber Reporter integration
@@ -138,5 +257,9 @@ public  void attach_interception(Scenario scenario){
 - [x] Added network interception logic to intercept network traffic and attach as a har file in report
 - [x] Added profiles 
 - [x] Taking values from application context in CustomLauncher via spring @Value tag
+- [x] Implemented Event Publisher
+- [x] Cucumber Reporter Plugin
+- [x] RestAssured Integration
+- [x] Data Carrier ScenarioContext
+- [x] Freemarker Template Engine Integration
 - [ ] Re-run functionality integration
-- [ ] Cucumber Reporter Plugin
