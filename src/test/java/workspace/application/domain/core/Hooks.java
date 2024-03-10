@@ -1,12 +1,13 @@
 package workspace.application.domain.core;
 
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
+import io.cucumber.java.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import workspace.application.domain.TestConfig.CommonWorld;
+import workspace.application.domain.actions.ScenarioContext;
 import workspace.application.domain.core.network_api_interceptor_new.NetworkInterception;
+import workspace.application.domain.reporter.CucumberReporter;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +19,9 @@ public class Hooks {
     WebdriverFactory webdriverFactory;
 
     @Autowired
+    ScenarioContext scenarioContext; // Its a data carrier between steps
+
+    @Autowired
     NetworkInterception networkInterception;
 
     @Before("@ui")
@@ -26,6 +30,12 @@ public class Hooks {
         log.info(String.format("Test common username ==> %s ", CommonWorld.commonConfig.getProperty("common_username")));
         webdriverFactory.initializeDriver();
         start_interception(scenario);
+    }
+
+    @Before
+    public void general_beforeScenario(Scenario scenario){
+        log.info("Setting up scenario in scenarioContext");
+        scenarioContext.put("scenario", scenario);
     }
 
     @After("@ui")
@@ -45,4 +55,16 @@ public class Hooks {
             scenario.attach(harBytes,"application",String.format("%s-%s.har",scenario.getName(),(DateTimeFormatter.ofPattern("dd-MM-yyyy-hh-mm-ss-s").withZone(ZoneId.systemDefault()).format(Instant.now()))));
         });
     }
+
+    @BeforeAll
+    public static void beforeAllMethod(){
+        log.info("**************** [[ BeforeAll Executed Cucumber ]] *******************");
+    }
+
+    @AfterAll
+    public static void afterAllMethod(){
+        log.info("**************** [[ AfterAll Executed Cucumber ]] *******************");
+        CucumberReporter.setupReport();
+    }
+
 }

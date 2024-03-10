@@ -174,7 +174,80 @@ public class CucumberEventLIstener implements EventListener {
 
 ```
 
+---
+
+### RestAssured Integration
+
+Integrated RestAssured for Rest API Testing
+
+```java
+
+    @Autowired
+    RestSpecificationFactory restSpecificationFactory;
+// can use this object to get requestspecifiction instance.
+
+
+// further it can be used as 
+
+    Response response =  restSpecificationFactory.getInstance().given()
+            .log().all()
+            .body(reqPayload)
+            .when()
+            .post(URL)
+            .then()
+            .statusCode(anyOf(equalTo(200), equalTo(201)))
+            .extract()
+            .response();    
+
+```
+**Note:** 
+**RestSpecificationFactory Class** contains various methods for setting proxy, adding Keystore and TrustStore etc.
+
 ----
+
+### ScenarioContext Data Carrier Between Cucumber Steps
+
+Added ScenarioContext Class which acts as a data carrier to pass data between cucumber steps.
+
+```java
+
+@Component
+@ScenarioScope
+public class ScenarioContext {
+
+    private Map<String,Object> scnearioContext;
+
+    public ScenarioContext() { }
+
+    @PostConstruct
+    public void init(){
+        scnearioContext = new LinkedHashMap<>();
+    }
+
+    public void put(String key, Object value){
+        scnearioContext.put(key,value);
+    }
+
+    public Object get(String key){
+        return scnearioContext.get(key);
+    }
+}
+
+// Can be used like below as a property injection within any class.
+@Autowired
+ScenarioContext scenarioContext;
+
+// can be used like below to get and set values.
+@Before // one of the already implemented example
+public void general_beforeScenario(Scenario scenario){
+  log.info("Setting up scenario in scenarioContext");
+  scenarioContext.put("scenario", scenario);
+}
+
+// To get Value
+Scenario scenario = (Scenario) scenarioContext.get("scenario");
+
+```
 
 ##### Future upcoming Enhancements  ...
 - [x] Selenium Webdriver integration
@@ -186,4 +259,6 @@ public class CucumberEventLIstener implements EventListener {
 - [x] Taking values from application context in CustomLauncher via spring @Value tag
 - [x] Implemented Event Publisher
 - [x] Cucumber Reporter Plugin
+- [x] RestAssured Integration
+- [x] Data Carrier ScenarioContext
 - [ ] Re-run functionality integration
