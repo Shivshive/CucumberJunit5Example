@@ -6,12 +6,18 @@ import net.masterthought.cucumber.Reportable;
 import net.masterthought.cucumber.presentation.PresentationMode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import java.io.File;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Component
 public class CucumberReporter {
@@ -47,5 +53,25 @@ public class CucumberReporter {
 
         ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
         Reportable result = reportBuilder.generateReports();
+    }
+
+    public static byte[] zipFile(String filename, byte[] input) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ZipOutputStream zos = new ZipOutputStream(baos);
+        ZipEntry entry = new ZipEntry(filename);
+        entry.setSize(input.length);
+        zos.putNextEntry(entry);
+        zos.write(input);
+        zos.closeEntry();
+        zos.close();
+        return baos.toByteArray();
+    }
+
+    public static byte[] convertToByteArray(File file) throws FileNotFoundException, IOException {
+        byte[] byteArray = new byte[(int) file.length()];
+        try(FileInputStream fis = new FileInputStream(file)){
+            fis.read(byteArray);
+        }
+        return byteArray;
     }
 }

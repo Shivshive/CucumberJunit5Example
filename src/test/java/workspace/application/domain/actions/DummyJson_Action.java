@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import workspace.application.domain.TestConfig.CommonWorld;
 import workspace.application.domain.TestConfig.EnvConfig;
 import workspace.application.domain.core.RestSpecificationFactory;
+
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -33,17 +34,20 @@ public class DummyJson_Action {
     @Value("${add-product.url}")
     private String ADD_PRODUCT_URL;
 
-    public void add_new_product(String productName){;
+    @Value("${get-single-product.url}")
+    private String GET_PRoDUCT_URL;
+
+    public void add_new_product(String productName) {
+        ;
 
         Path add_product_req_template_path = Paths.get(CommonWorld.commonConfig.getProperty("add-product.request.template"));
-        Optional<String> requestPayload = restSpecificationFactory.prepareRequestFromTemplate(add_product_req_template_path, new LinkedHashMap<>(){{
-            put("product",productName);
+        Optional<String> requestPayload = restSpecificationFactory.prepareRequestFromTemplate(add_product_req_template_path, new LinkedHashMap<>() {{
+            put("product", productName);
         }});
 
-        requestPayload.ifPresentOrElse( reqPayload -> {
+        requestPayload.ifPresentOrElse(reqPayload -> {
 
-            Response response =  restSpecificationFactory.getInstance().given()
-                    .log().all()
+            Response response = restSpecificationFactory.getInstance()
                     .body(reqPayload)
                     .when()
                     .post(ADD_PRODUCT_URL)
@@ -51,10 +55,22 @@ public class DummyJson_Action {
                     .statusCode(anyOf(equalTo(200), equalTo(201)))
                     .extract()
                     .response();
-            log.info(String.format("%s",response.getBody().prettyPrint()));
-            scenarioContext.put("response",response);
+            log.info(String.format("%s", response.getBody().prettyPrint()));
+            scenarioContext.put("response", response);
 
-        }, ()-> Assertions.fail(String.format("Request Payload ==> %s",requestPayload)));
+        }, () -> Assertions.fail(String.format("Request Payload ==> %s", requestPayload)));
+    }
+
+    public void getProductWithId(int id) {
+
+        Response response = restSpecificationFactory.getInstance()
+                .get(String.format("%s/%s",GET_PRoDUCT_URL,id))
+                .then()
+                .assertThat()
+                .extract()
+                .response();
+        log.info(String.format("Get Product With ID is Executed Successfully with response code as %s", response.getStatusCode()));
+        scenarioContext.put("response", response);
     }
 
 }

@@ -8,6 +8,8 @@ import lombok.extern.java.Log;
 
 import org.assertj.core.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import workspace.application.domain.actions.CommonAPIAction;
 import workspace.application.domain.actions.ScenarioContext;
 
 import java.util.Arrays;
@@ -21,6 +23,12 @@ public class CommonAPISteps {
 
     @Autowired
     ScenarioContext scenarioContext;
+
+    @Autowired
+    CommonAPIAction commonAPIAction;
+
+    @Autowired
+    Environment environment;
 
     public CommonAPISteps() {
     }
@@ -45,4 +53,10 @@ public class CommonAPISteps {
     public List<Integer> codes(String statusCodes){
         return Arrays.stream(statusCodes.split(",")).map(Integer::parseInt).toList();
     }
+
+    @And("Get current auth user")
+    public void get_current_auth_user(){
+        commonAPIAction.get_auth_user();
+    }
+
 }
