@@ -4,6 +4,7 @@ import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import net.masterthought.cucumber.Reportable;
 import net.masterthought.cucumber.presentation.PresentationMode;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +38,13 @@ public class CucumberReporter {
 
     public static void setupReport() {
 
+        try {
+            FileUtils.deleteDirectory(Paths.get("Cucumber-Reports").toFile());
+            Files.createDirectory(Paths.get("Cucumber-Reports"));
+        } catch (Exception e) {
+
+        }
+
         File reportOutputDirectory = new File(String.format("Cucumber-Reports//%s", DateTimeFormatter.ofPattern("dd-MM-yyyy-mm-ss-s").withZone(ZoneId.systemDefault()).format(Instant.now())));
         List<String> jsonFiles = new ArrayList<>();
         jsonFiles.add("target/cucumber-report/cucumber.json");
@@ -69,7 +77,7 @@ public class CucumberReporter {
 
     public static byte[] convertToByteArray(File file) throws FileNotFoundException, IOException {
         byte[] byteArray = new byte[(int) file.length()];
-        try(FileInputStream fis = new FileInputStream(file)){
+        try (FileInputStream fis = new FileInputStream(file)) {
             fis.read(byteArray);
         }
         return byteArray;
