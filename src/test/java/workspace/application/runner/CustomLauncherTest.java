@@ -65,7 +65,7 @@ public class CustomLauncherTest {
 
     @AfterAll
     public void afterAll(){
-        CucumberReporter.setupReport();
         log.info(" *************************** [[ after all executed ]] ******************************** ");
+        CucumberReporter.setupReport();
     }
 }

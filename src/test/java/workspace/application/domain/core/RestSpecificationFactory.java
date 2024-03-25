@@ -1,5 +1,6 @@
 package workspace.application.domain.core;
 
+import de.sstoehr.harreader.model.HttpMethod;
 import io.cucumber.java.Scenario;
 import io.cucumber.spring.ScenarioScope;
 import io.restassured.RestAssured;
@@ -18,6 +19,7 @@ import workspace.application.domain.actions.ScenarioContext;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -35,11 +37,15 @@ public class RestSpecificationFactory {
         @Override
         public Response filter(FilterableRequestSpecification filterableRequestSpecification, FilterableResponseSpecification filterableResponseSpecification, FilterContext filterContext) {
 
+
             Response response = filterContext.next(filterableRequestSpecification,filterableResponseSpecification);
 
             Scenario scenario = (Scenario) scenarioContext.get("scenario");
             scenario.log(filterableRequestSpecification.getBaseUri());
-            scenario.log(filterableRequestSpecification.getBody());
+            if(List.of(HttpMethod.PUT, HttpMethod.POST,HttpMethod.PATCH).stream().anyMatch( httpMethod ->  filterableRequestSpecification.getMethod().equalsIgnoreCase(httpMethod.name()))){
+                scenario.log(filterableRequestSpecification.getBody());
+            }
+
             scenario.log(filterableRequestSpecification.getHeaders().toString());
 
             scenario.log(filterableRequestSpecification.getURI());
@@ -52,7 +58,7 @@ public class RestSpecificationFactory {
     };
 
     public RequestSpecification getInstance(){
-        return RestAssured.given().filter(filter);
+        return RestAssured.given().filter(filter).log().all();
     }
 
     public RequestSpecification setProxy(RequestSpecification request, String protocol, String host, int port, String username, String password){

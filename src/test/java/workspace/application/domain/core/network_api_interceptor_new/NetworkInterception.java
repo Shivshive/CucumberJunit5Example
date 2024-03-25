@@ -76,7 +76,6 @@ public class NetworkInterception {
                 HarTimeFrame harTimeFrame = new HarTimeFrame();
                 harTimeFrame.setStartTime(startTime);
                 harTimeFrame.setEndTime(endTime);
-
                 harMap.put(harTimeFrame,new HarMap(req,res,harTimeFrame));
 
                 return res;
